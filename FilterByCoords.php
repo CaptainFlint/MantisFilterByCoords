@@ -16,41 +16,41 @@
 
 class FilterByCoordsPlugin extends MantisPlugin  {
 
-    /**
-     *  A method that populates the plugin information and minimum requirements.
-     */
-    function register( ) {
-        $this->name = plugin_lang_get( 'title' );
-        $this->description = plugin_lang_get( 'description' );
-        
-        $this->version = '1.0.0';
-        $this->requires = array(
-        	'MantisCore' => '1.2.0'
-        );
-        
-        $this->author = 'Konstantin Vlasov';
-        $this->contact = 'support@flint-inc.ru';
-        $this->url = 'https://github.com/CaptainFlint/MantisFilterByCoords';
-    }
-    
- 
-    function init() {
-    }
- 
+	/**
+	 *  A method that populates the plugin information and minimum requirements.
+	 */
+	function register( ) {
+		$this->name = plugin_lang_get( 'title' );
+		$this->description = plugin_lang_get( 'description' );
 
-    function hooks( ) {
-        $hooks = array(
-            'EVENT_FILTER_FIELDS' => 'filter_by_coords'
-        );
-        return $hooks;
-    }
+		$this->version = '1.0.0';
+		$this->requires = array(
+			'MantisCore' => '1.2.0'
+		);
 
-    
-    function filter_by_coords($p_event) {
+		$this->author = 'Konstantin Vlasov';
+		$this->contact = 'support@flint-inc.ru';
+		$this->url = 'https://github.com/CaptainFlint/MantisFilterByCoords';
+	}
+
+
+	function init() {
+	}
+
+
+	function hooks( ) {
+		$hooks = array(
+			'EVENT_FILTER_FIELDS' => 'filter_by_coords'
+		);
+		return $hooks;
+	}
+
+
+	function filter_by_coords($p_event) {
 		require_once( 'classes/FilterByCoordsField.class.php' );
 		return array(
 			'FilterByCoordsField'
 		);
-    }
-    
+	}
+
 }
