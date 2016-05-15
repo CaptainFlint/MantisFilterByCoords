@@ -32,49 +32,8 @@ class FilterByCoordsField extends MantisFilter {
 	 */
 	public $colspan = 5;
 
-
 	public function __construct() {
 		$this->title = plugin_lang_get( 'field_label', 'FilterByCoords' );
-	}
-
-	 public static function inputs( $p_inputs=null ) {
-			static $s_inputs = null;
-
-			if ( is_array($p_inputs) ) {
-				return $s_inputs;
-			} else {
-				$s_inputs = $p_inputs;
-			}
-	 }
-
-
-	/**
-	 * Format the filter input, returning the list cleaned with any separator
-	 * character.
-	 * @param multi $p_filter_input Filter field input
-	 * @return string the filtered string or null
-	 */
-	public static function format_inputs( $p_filter_input = null ) {
-		$t_list = null;
-		if ( is_array( $p_filter_input ) ) {
-			// Should never be used (dead code) when $type = FILTER_TYPE_STRING
-			$t_list = array();
-			foreach( $p_filter_input as $t_bug_id ) {
-				if( is_numeric(trim($t_bug_id)) && !preg_match('/\./', trim($t_bug_id)) ){
-					$t_list[] = trim($t_bug_id);
-				}
-			}
-
-			$t_list = join( ',', $t_list );
-		} else {
-			// Match any types of separator !!! :-)
-			// Replace non numbers by the arbitrary space character
-			$t_list = trim(preg_replace( '/[^0-9]/', ' ', $p_filter_input ));
-			// replace all series of space characters by a comma separator for the
-			// query
-			$t_list = preg_replace( '/\s+/', ',', $t_list );
-		}
-		return $t_list;
 	}
 
 	/**
@@ -84,8 +43,7 @@ class FilterByCoordsField extends MantisFilter {
 	 * @param multi Filter field input
 	 * @return boolean Input valid (true) or invalid (false)
 	 */
-	public function validate( $p_filter_input ) {
-		self::inputs( $p_filter_input );
+	public function validate($p_filter_input) {
 		return true;
 	}
 
@@ -95,18 +53,39 @@ class FilterByCoordsField extends MantisFilter {
 	 * @param multi Filter field input
 	 * @return array Keyed-array with query elements; see developer guide
 	 */
-	function query( $p_filter_input ) {
-		$t_list = self::format_inputs( $p_filter_input );
+	function query($p_filter_input) {
+		$coords_regexp = '\\(sec[0-9+\\-]+\\);([0-9.\\-]+);([0-9.\\-]+);([0-9.\\-]+)';
+		preg_match_all("/$coords_regexp/", $p_filter_input, $src_matches, PREG_SET_ORDER);
 
-		if( empty($t_list ) ){
+		$max_distance = 300;
+		$bugs = array();
+
+		// Double escaping required: first for PHP strings, then for SQL strings
+		$t_result = db_query_bound("SELECT * FROM " . db_get_table('mantis_bug_text_table') . " WHERE description REGEXP '" . db_prepare_string($coords_regexp) . "'");
+		$t_row_count = db_num_rows($t_result);
+		for ($i = 0; $i < $t_row_count; ++$i) {
+			$t_row = db_fetch_array($t_result);
+			preg_match_all("/$coords_regexp/", $t_row['description'], $bug_matches, PREG_SET_ORDER);
+			// Check whether there is a set of coordinates close enough
+			// to one of the requested set of coordinates.
+			// In-game coordinates: x;z;y , so we ignore the middle one (vertical)
+			foreach ($bug_matches as $bug_coords) {
+				foreach ($src_matches as $src_coords) {
+					if (pow($bug_coords[1] - $src_coords[1], 2) + pow($bug_coords[3] - $src_coords[3], 2) <= pow($max_distance, 2)) {
+						array_push($bugs, $t_row['id']);
+						break 2;
+					}
+				}
+			}
+		}
+
+		if (empty($bugs)) {
 			return;
 		}
 
-		$t_bug_table = db_get_table( 'mantis_bug_table' );
-
-
+		$t_bug_table = db_get_table('mantis_bug_table');
 		$t_query = array(
-			'where' => "$t_bug_table.id IN ( $t_list )",
+			'where' => "$t_bug_table.id IN (" . implode($bugs, ',') . ")",
 		);
 
 		return $t_query;
@@ -117,8 +96,8 @@ class FilterByCoordsField extends MantisFilter {
 	 * @param multi Filter field input
 	 * @return string Current value output
 	 */
-	function display( $p_filter_value ) {
-		return self::format_inputs( $p_filter_value );
+	function display($p_filter_value) {
+		return $p_filter_value;
 	}
 
 	/**
