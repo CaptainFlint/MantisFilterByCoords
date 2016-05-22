@@ -22,6 +22,7 @@ class FilterByCoordsPlugin extends MantisPlugin  {
 	function register( ) {
 		$this->name = plugin_lang_get( 'title' );
 		$this->description = plugin_lang_get( 'description' );
+		$this->page = 'config';
 
 		$this->version = '1.0.0';
 		$this->requires = array(
@@ -31,6 +32,15 @@ class FilterByCoordsPlugin extends MantisPlugin  {
 		$this->author = 'Konstantin Vlasov';
 		$this->contact = 'support@flint-inc.ru';
 		$this->url = 'https://github.com/CaptainFlint/MantisFilterByCoords';
+	}
+
+	/**
+	 * Default plugin configuration.
+	 */
+	function config() {
+		return array(
+			'max_distance' => 300
+		);
 	}
 
 

@@ -57,7 +57,7 @@ class FilterByCoordsField extends MantisFilter {
 		$coords_regexp = '\\(sec[0-9+\\-]+\\);([0-9.\\-]+);([0-9.\\-]+);([0-9.\\-]+)';
 		preg_match_all("/$coords_regexp/", $p_filter_input, $src_matches, PREG_SET_ORDER);
 
-		$max_distance = 300;
+		$max_distance = config_get('plugin_FilterByCoords_max_distance');
 		$bugs = array();
 
 		// Double escaping required: first for PHP strings, then for SQL strings
