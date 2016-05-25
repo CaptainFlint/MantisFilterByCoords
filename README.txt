@@ -13,21 +13,27 @@ by Alain D'EURVEILHER (alain.deurveilher@gmail.com)
 
 +------------------------------------------------------------------------------+
 
-The plugin adds a new field "Coordinates" to the list of filters. In this field
-one can enter one or more sets of coordinates in the format:
+The plugin adds two new fields to the list of filters: "Coordinates" and
+"Distance". After applying filter, only those bugs will be displayed which:
+a) have one or more set of coordinates in the Description field;
+b) at least one of those sets of coordinates is not farther than the specified
+   distance from at least one of the points specified in the Coordinates field
+   (the vertical component is ignored).
+
+The Distance is an integer value, amount of the in-game units. The Coordinates
+field should contain one or more sets of coordinates in the format:
 
 (sec+0011-0008);45310.2;51.5865;-30096.5
 
-Sets should be separated from each other by spaces or newlines. Input field may
+Sets should be separated from each other by spaces or newlines. This field may
 also contain other text, it will be simply ignored (it allows to copy-paste bug
 report messages from bugs.txt as is).
 
-The plugin then makes sure that the resultant list displays only bugs which:
-a) have one or more set of coordinates in the Description or Additional
-   Information;
-b) at least one of the sets of coordinates is close enough (<= 300 units) to at
-   least one of the points specified in the filter field (the vertical component
-   is ignored).
++------------------------------------------------------------------------------+
+Version 1.0.1
+* Added plugin option to customize the default maximum distance.
+* Added filter field to specify the maximum distance.
 
-TODO:
-* Add option to customize inclusion distance.
+Version 1.0.0
+* First working version.
+* Hardcoded maximum distance from specified coordinates to 300 in-game units.

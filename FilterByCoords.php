@@ -58,8 +58,9 @@ class FilterByCoordsPlugin extends MantisPlugin  {
 
 	function filter_by_coords($p_event) {
 		require_once( 'classes/FilterByCoordsField.class.php' );
+		require_once( 'classes/MaxDistanceField.class.php' );
 		return array(
-			'FilterByCoordsField'
+			'FilterByCoordsField', 'MaxDistanceField'
 		);
 	}
 

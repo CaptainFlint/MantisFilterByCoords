@@ -33,7 +33,7 @@ class FilterByCoordsField extends MantisFilter {
 	public $colspan = 5;
 
 	public function __construct() {
-		$this->title = plugin_lang_get( 'field_label', 'FilterByCoords' );
+		$this->title = plugin_lang_get('field_coords_label', 'FilterByCoords');
 	}
 
 	/**
@@ -57,7 +57,9 @@ class FilterByCoordsField extends MantisFilter {
 		$coords_regexp = '\\(sec[0-9+\\-]+\\);([0-9.\\-]+);([0-9.\\-]+);([0-9.\\-]+)';
 		preg_match_all("/$coords_regexp/", $p_filter_input, $src_matches, PREG_SET_ORDER);
 
-		$max_distance = config_get('plugin_FilterByCoords_max_distance');
+		$t_filter = current_user_get_bug_filter();
+
+		$max_distance = $t_filter['FilterByCoords_dist'];
 		$bugs = array();
 
 		// Double escaping required: first for PHP strings, then for SQL strings
