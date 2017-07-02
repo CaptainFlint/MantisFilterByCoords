@@ -30,6 +30,15 @@ also contain other text, it will be simply ignored (it allows to copy-paste bug
 report messages from bugs.txt as is).
 
 +------------------------------------------------------------------------------+
+Version 2.0.0
+* Converted to work with Mantis 2.x (tested on 2.5.1):
+** fixed plugin requirements;
+** fixed non-working distance field;
+** reorganized Configuration page according to the new design.
+* Fixed: When there was no matches, full list of bugs was displayed instead of
+  empty list.
+* If no valid coordinates are provided the bugs list will not be filtered.
+
 Version 1.0.1
 * Added plugin option to customize the default maximum distance.
 * Added filter field to specify the maximum distance.

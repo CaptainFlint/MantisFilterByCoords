@@ -24,9 +24,9 @@ class FilterByCoordsPlugin extends MantisPlugin  {
 		$this->description = plugin_lang_get( 'description' );
 		$this->page = 'config';
 
-		$this->version = '1.0.1';
+		$this->version = '2.0.0';
 		$this->requires = array(
-			'MantisCore' => '1.2.0'
+			'MantisCore' => '2.0.0'
 		);
 
 		$this->author = 'Konstantin Vlasov';

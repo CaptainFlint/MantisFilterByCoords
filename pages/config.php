@@ -17,41 +17,53 @@
 auth_reauthenticate( );
 access_ensure_global_level( config_get( 'manage_plugin_threshold' ) );
 
-html_page_top( lang_get( 'plugin_FilterByCoords_title' ) );
+layout_page_header( lang_get( 'plugin_FilterByCoords_title' ) );
 
-print_manage_menu( );
+layout_page_begin( 'manage_overview_page.php' );
+
+print_manage_menu( 'manage_plugin_page.php' );
 
 ?>
 
-<br />
-<form action="<?php echo plugin_page( 'config_edit' )?>" method="post">
+<div class="col-md-12 col-xs-12">
+<div class="space-10"></div>
+<div class="form-container" >
+
+<form id="filter-coords-config-form" action="<?php echo plugin_page( 'config_edit' )?>" method="post">
 <?php echo form_security_field( 'plugin_format_config_edit' ) ?>
-<table align="center" class="width50" cellspacing="1">
 
-<tr>
-	<td class="form-title" colspan="3">
+<div class="widget-box widget-color-blue2">
+<div class="widget-header widget-header-small">
+	<h4 class="widget-title lighter">
+		<i class="ace-icon fa fa-text-width"></i>
 		<?php echo lang_get( 'plugin_FilterByCoords_title' ) . ': ' . lang_get( 'plugin_FilterByCoords_config' )?>
-	</td>
-</tr>
-
-<tr <?php echo helper_alternate_class( )?>>
-	<td class="category" width="80%">
+	</h4>
+</div>
+<div class="widget-body">
+<div class="widget-main no-padding">
+<div class="table-responsive">
+<table class="table table-bordered table-condensed table-striped">
+<tr>
+	<th class="category width-40">
 		<?php echo lang_get( 'plugin_FilterByCoords_max_distance' )?>
-		<br /><span class="small"><?php echo lang_get( 'plugin_FilterByCoords_max_distance_descr' )?></span>
-	</td>
-	<td class="center" width="20%">
+		<br />
+		<span class="small"><?php echo lang_get( 'plugin_FilterByCoords_max_distance_descr' )?></span>
+	</th>
+	<td class="center">
 		<label><input name="max_distance" value="<?php echo( plugin_config_get( 'max_distance' ) ); ?>" /></label>
 	</td>
 </tr>
-
-<tr>
-	<td class="center" colspan="3">
-		<input type="submit" class="button" value="<?php echo lang_get( 'change_configuration' )?>" />
-	</td>
-</tr>
-
 </table>
+</div>
+</div>
+<div class="widget-toolbox padding-8 clearfix">
+	<input type="submit" class="btn btn-primary btn-white btn-round" value="<?php echo lang_get( 'change_configuration' )?>" />
+</div>
+</div>
+</div>
 </form>
+</div>
+</div>
 
 <?php
-html_page_bottom();
+layout_page_end();

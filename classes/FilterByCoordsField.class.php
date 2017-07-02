@@ -56,10 +56,13 @@ class FilterByCoordsField extends MantisFilter {
 	function query($p_filter_input) {
 		$coords_regexp = '\\(sec[0-9+\\-]+\\);([0-9.\\-]+);([0-9.\\-]+);([0-9.\\-]+)';
 		preg_match_all("/$coords_regexp/", $p_filter_input, $src_matches, PREG_SET_ORDER);
+		// No coordinates were provided, do not filter
+		if (empty($src_matches))
+			return;
 
 		$t_filter = current_user_get_bug_filter();
 
-		$max_distance = $t_filter['FilterByCoords_dist'];
+		$max_distance = $t_filter['filterbycoords_dist'];
 		$bugs = array();
 
 		// Double escaping required: first for PHP strings, then for SQL strings
@@ -82,7 +85,8 @@ class FilterByCoordsField extends MantisFilter {
 		}
 
 		if (empty($bugs)) {
-			return;
+			# No bugs matched, return empty list
+			return array('where' => '0');
 		}
 
 		$t_bug_table = db_get_table('mantis_bug_table');
