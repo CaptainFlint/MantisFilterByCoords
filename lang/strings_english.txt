@@ -32,6 +32,7 @@ $s_plugin_FilterByCoords_title = 'Filter By Coordinates';
 $s_plugin_FilterByCoords_description = 'Filter by ETS/ATS in-game map coordinates';
 $s_plugin_FilterByCoords_field_coords_label = 'Coordinates';
 $s_plugin_FilterByCoords_field_dist_label = 'Distance';
+$s_plugin_FilterByCoords_field_sect_label = 'Sectors';
 
 $s_plugin_FilterByCoords_config = 'Configuration';
 $s_plugin_FilterByCoords_max_distance = 'Maximum Distance';
